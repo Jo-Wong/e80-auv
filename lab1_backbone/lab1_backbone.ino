@@ -1,94 +1,73 @@
-/******
- * lab1_backbone
- * Author: Apoorva Sharma (asharma@hmc.edu)
+/********
+ * Lab 1 Sketch
+ * Author: Apoorva Sharma (asharma@hmc.edu) 
  * Edited by: Josephine Wong (jowong@hmc.edu)
  * Created: 20 Jun 2016
- * Runs motors at various speeds, and records speeds as well
- *******/
+ * Runs the motors at various speeds for specific time intervals
+ *********/
 
 /* Libraries */
-// Logging
-#include <SdFat.h>
-#include <SPI.h>
-#include <MyLogger.h>
-
-// Motor
 #include <MotorDriver.h>
 #include <Params.h>
+#include <SdFat.h>
+#include <MyLogger.h>
+#include <SPI.h>
 
-/* Timing Variables */
-#define LOOP_INTERVAL 500000
+/* Global Variables */
+#define LOOP_INTERVAL 100 // in ms
 IntervalTimer controlTimer;
+MotorDriver motorDriver(MOTOR_L_FORWARD,MOTOR_L_REVERSE,MOTOR_R_FORWARD,MOTOR_R_REVERSE,MOTOR_V_FORWARD,MOTOR_V_REVERSE); 
 
-/* Logger and MotorDriver Objects */
+// Logger
 SdFat sd;
 SdFile file;
-MyLogger logger(sd, file);
-MotorDriver motorDriver(MOTOR_L_FORWARD,MOTOR_L_REVERSE,MOTOR_R_FORWARD,MOTOR_R_REVERSE); 
+MyLogger logger(sd,file);
 
-// PWM Sequence
-#define SEQ_LEN 11
-size_t curridx = 0;
-int seq_l[SEQ_LEN] = {10,25,0,50,0,75,0,100,0,125,0}; 
-int seq_r[SEQ_LEN] = {10,25,0,50,0,75,0,100,0,125,0};
-int seq_t[SEQ_LEN] = {2,2,2,2,2,2,2,2,2,2,2};
-unsigned long last_trans = 0;
+//-------------- Todo: Motor Sequence ----------//
+/* Create integer arrays for left, right, and vertical motors and time
+ * Motor values should be between -255 and 255
+ * Each index will represent a state (e.g. index = 0 means state0)
+ */
 
-/**************************************************************************/
+// setup(): initializes logger and motor pins
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
   delay(2000); // Wait to ensure computer monitor is ready
-  Serial.print("Logger: initializing sd card");
+  Serial.println(F("Serial connection started")); 
+  Serial.println("");
 
-  // see if the card is present and can be initialized:
-  if(!sd.begin(10, SPI_FULL_SPEED)) {
-    Serial.print("card failed");
+  Serial.print("\nLogger: Initializing SD card...");
+
+  // check if the card is present and can be initialized
+  if(!sd.begin(SD_CHIP_SELECT, SPI_FULL_SPEED)) {
+    Serial.println("Card failed, or not present");
+    // don't do anything more
     return;
   }
-  Serial.print("card initialized");
-  
-  /* Initialize the Logger */  
+  Serial.println("Card initialized");
+
+  /* Initialize the Logger */
   logger.include(&motorDriver);
   logger.init();
 
-  /* Initialize the motor pins */
-  pinMode(MOTOR_L_FORWARD,OUTPUT);
-  pinMode(MOTOR_L_REVERSE,OUTPUT);
-  pinMode(MOTOR_R_FORWARD,OUTPUT);
-  pinMode(MOTOR_R_REVERSE,OUTPUT);
-  
-  Serial.print("start control loop");
-  Serial.print("Press any character to stop logging");
-  last_trans = millis();
-  controlTimer.begin(controlLoop, LOOP_INTERVAL);
+  //-------Todo: initialize motor pins--------//
+  /* You should use the pinMode() function */
+
+  Serial.println("starting control loop");
+  controlTimer.begin(controlLoop, LOOP_INTERVAL*1000);
 }
 
-/**************************************************************************/
+// controlLoop(): updates motor output at every LOOP_INTERVAL 
 void controlLoop(void) {
-  unsigned long current_time = millis();
-  Serial.print(current_time);
-  
-  // handle state transitions
-  if (current_time - last_trans >= seq_t[curridx]*1000) {
-    if (curridx < SEQ_LEN - 1) {
-      curridx++;
-      last_trans = current_time;
-    }
-    Serial.print("switching to state "); Serial.println(curridx);
-  }
-  
-  motorDriver.left = seq_l[curridx];
-  motorDriver.right = seq_r[curridx];
-  motorDriver.vertical = seq_v[curridx];
-  motorDriver.apply();
-  motorDriver.printState();
-  
-  logger.log(); 
+  //-------Todo: write loop that handles state transitions----//
+  /* You can get the current time using millis() */
+  /* Use motorDriver object to set the motor values */
+
+  logger.log();
 }
 
-/**************************************************************************/
+// loop(): write the buffered data to the sd card
 void loop() {
-  // only work on writing the files
   logger.write();
-  
 }
+
