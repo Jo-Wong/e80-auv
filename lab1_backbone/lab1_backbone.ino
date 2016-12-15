@@ -53,6 +53,7 @@ void setup() {
 
   //-------Todo: initialize motor pins--------//
   /* You should use the pinMode() function */
+  pinMode(LOOP_LED,OUTPUT);
 
   Serial.println("starting control loop");
   Serial.println("Press any character to stop logging");
@@ -65,11 +66,13 @@ void controlLoop(void) {
   /* You can get the current time using millis() */
   /* Use motorDriver object to set the motor values */
 
+  digitalWrite(LOOP_LED,0);
   logger.log();
 }
 
 // loop(): write the buffered data to the sd card
 void loop() {
+  digitalWrite(LOOP_LED,1);
   logger.write();
 }
 
