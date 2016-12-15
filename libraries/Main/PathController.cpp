@@ -47,7 +47,7 @@ void PathController::init(char* trajFileName, StateEstimator* stateEstimator_p, 
     }
 
     file.close();
-
+	Serial.printf("%d", i);
     if (i % 3 != 0) {
       Serial.println("Invalid trajectory file!");
     }
@@ -58,6 +58,8 @@ void PathController::init(char* trajFileName, StateEstimator* stateEstimator_p, 
     Serial.println("Trajectory: ");
     for (i = 0; i < num_waypoints; ++i) {
       float x; float y;
+	  Serial.print(trajectory[i].x); Serial.print(" ");
+	  Serial.print(trajectory[i].y);
       stateEstimator_p->latlonToXY(trajectory[i].x, trajectory[i].y, &x, &y);
       trajectory[i].x = x;
       trajectory[i].y = y;

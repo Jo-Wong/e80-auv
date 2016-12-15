@@ -61,7 +61,11 @@ void SensorGPS::getCSVString(String * csvStr_p)
 
 size_t SensorGPS::writeDataBytes(unsigned char * buffer, size_t idx)
 {
+  Serial.print("GPS write data");
   int32_t * int32_slot = (int32_t *) (buffer + idx);
+  Serial.print("LAT = "); Serial.print(state.lat);
+  Serial.print("LON = "); Serial.print(state.lon);
+  Serial.println("");
   int32_slot[0] = state.lat;
   int32_slot[1] = state.lon;
   idx += 2*sizeof(int32_t);

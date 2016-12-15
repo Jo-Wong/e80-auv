@@ -45,16 +45,19 @@
 #define GPS_READ_INTERVAL 3
 
 /* PINS */
-#define SD_CHIP_SELECT 10
+#define SD_CHIP_SELECT 4 // 10 if using smaller adapter
 
-#define MOTOR_L_FORWARD 3
-#define MOTOR_L_REVERSE 4
+#define MOTOR_L_FORWARD 23
+#define MOTOR_L_REVERSE 20
 #define MOTOR_R_FORWARD 22
 #define MOTOR_R_REVERSE 21
+#define MOTOR_V_FORWARD	3
+#define MOTOR_V_REVERSE	4
 
 /* MOTOR DYNAMICS */
 // the minimum PWM amount that causes the motors to actually spin
 #define MOTOR_L_DEADZONE 34
 #define MOTOR_R_DEADZONE 34 
+#define MOTOR_V_DEADZONE 34
 
 #endif

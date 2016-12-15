@@ -131,7 +131,7 @@ void MyLogger::init(void) {
 void MyLogger::log(void){
 	size_t idx = 0;
 	byte * int_slot = (byte *) rowbuffer;
-	*int_slot = 65;
+	*int_slot = dummy;
 	idx += sizeof(byte);
 	
 	for(size_t i = 0; i < num_datasources; ++i) {
@@ -152,20 +152,22 @@ void MyLogger::log(void){
 	for(size_t i = 0; i < idx; i++) {
 		*(currentBuffer + currentIdx) = *(rowbuffer + i);
 		currentIdx++;
-	}
 	
-	if(currentIdx >= 512) {
-		fullQueue[fullHead] = currentBuffer;
-		fullHead = queueNext(fullHead);
-		Serial.println("Logger: filled one buffer");
-		
-		if(emptyHead != emptyTail) {
-			currentBuffer = emptyQueue[emptyTail];
-			emptyTail = queueNext(emptyTail);	
-			currentIdx = 0;
-		} else {
-			Serial.println("Logger: ran out of empty buffers. Skipping entry");
-			return;
+		if(currentIdx >= 512) {
+			fullQueue[fullHead] = currentBuffer;
+			fullHead = queueNext(fullHead);
+			Serial.println("Logger: filled one buffer");
+			dummy = dummy + 1;
+			
+			if(emptyHead != emptyTail) {
+				Serial.println("not equal");
+				currentBuffer = emptyQueue[emptyTail];
+				emptyTail = queueNext(emptyTail);	
+				currentIdx = 0;
+			} else {
+				Serial.println("Logger: ran out of empty buffers. Skipping entry");
+				return;
+			}
 		}
 	}
 }
@@ -173,6 +175,7 @@ void MyLogger::log(void){
 void MyLogger::write(void) {
 	
 	while(bn < FILE_BLOCK_COUNT) {
+		// If character entered, stop writing
 		if(Serial.available()) break;
 		else {
 			noInterrupts();

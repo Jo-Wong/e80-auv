@@ -37,6 +37,10 @@ bool SensorIMU::read(void)
   mag_p->getEvent(&mag_event);
   gyro_p->getEvent(&gyro_event);
   
+  //Serial.print("magnetx:"); Serial.print(mag_event.magnetic.x);
+  //Serial.print("magnety:"); Serial.print(mag_event.magnetic.y);
+  //Serial.print("magnetz:"); Serial.print(mag_event.magnetic.z);
+  
   state.acceleration = accel_event.acceleration; // TODO remove gravity from this acceleration
   state.omega = gyro_event.gyro;
 

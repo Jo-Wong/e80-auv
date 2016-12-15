@@ -524,8 +524,12 @@ bool Adafruit_LSM303_Mag_Unified::getEvent(sensors_event_t *event) {
   event->magnetic.x = _magData.x / _lsm303Mag_Gauss_LSB_XY * SENSORS_GAUSS_TO_MICROTESLA;
   event->magnetic.y = _magData.y / _lsm303Mag_Gauss_LSB_XY * SENSORS_GAUSS_TO_MICROTESLA;
   event->magnetic.z = _magData.z / _lsm303Mag_Gauss_LSB_Z * SENSORS_GAUSS_TO_MICROTESLA;
-		
-	return true;
+
+  Serial.print("magnetx:"); Serial.print(_magData.x);
+  Serial.print("magnety:"); Serial.print(_magData.y);
+  Serial.print("magnetz:"); Serial.print(_magData.z);  
+  
+  return true;
 }
 
 /**************************************************************************/

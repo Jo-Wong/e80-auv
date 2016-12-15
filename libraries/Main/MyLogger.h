@@ -6,7 +6,7 @@
 #define LOG_FILENAME_BASE "log"
 #define LOG_FILENAME_BUFFERLEN 20
 #define HEADINGS_FILENAME_BASE "inf"
-#define FILE_BLOCK_COUNT 1000
+#define FILE_BLOCK_COUNT 500
 #define MAX_BYTES_PER_ROW 500
 #define BUFFER_BLOCK_COUNT 12
 #define MAX_NUM_DATASOURCES 20
@@ -46,5 +46,6 @@ private:
 	uint32_t bn = 0;
 
 	void padding(int number, byte width, String & str);
+	int dummy = 65;
 };
 #endif

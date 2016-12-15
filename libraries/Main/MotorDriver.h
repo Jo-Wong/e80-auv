@@ -22,7 +22,7 @@
 class MotorDriver : public DataSource
 {
 public:
-  MotorDriver(int left1, int left2, int right1, int right2);
+  MotorDriver(int left1, int left2, int right1, int right2, int vertical1, int vertical2);
 
   // applies the stored values to the pins
   void apply(void);
@@ -33,6 +33,7 @@ public:
   // motor values (range from -127 to +127) for full reverse or full forward
   int right;
   int left;
+  int vertical;
 
   // from DataSource
   void getCSVString(String * csvStr_p);
@@ -44,14 +45,18 @@ private:
   int left2;
   int right1;
   int right2;
+  int vertical1;
+  int vertical2;
 
   // absolute value of pwm outputs
   unsigned int l_abs;
   unsigned int r_abs;
+  unsigned int v_abs;
 
   // direction of pwm outputs
   bool l_dir;
   bool r_dir;
+  bool v_dir;
 };
 
 #endif
