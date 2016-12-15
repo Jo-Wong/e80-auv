@@ -25,10 +25,13 @@ SdFile file;
 MyLogger logger(sd,file);
 
 //-------------- Todo: Motor Sequence ----------//
-/* Create integer arrays for left, right, and vertical motors and time
- * Motor values should be between -255 and 255
- * Each index will represent a state (e.g. index = 0 means state0)
- */
+#define SEQ_LEN 11
+size_t curridx = 0;
+int seq_l[SEQ_LEN] = {10,25,0,50,0,75,0,100,0,125,0}; 
+int seq_r[SEQ_LEN] = {10,25,0,50,0,75,0,100,0,125,0};
+int seq_v[SEQ_LEN] = {10,25,0,50,0,75,0,100,0,125,0};
+int seq_t[SEQ_LEN] = {2,2,2,2,2,2,2,2,2,2,2};
+unsigned long last_trans = 0;
 
 // setup(): initializes logger and motor pins
 void setup() {
@@ -52,18 +55,37 @@ void setup() {
   logger.init();
 
   //-------Todo: initialize motor pins--------//
-  /* You should use the pinMode() function */
+  pinMode(MOTOR_L_FORWARD,OUTPUT);
+  pinMode(MOTOR_L_REVERSE,OUTPUT);
+  pinMode(MOTOR_R_FORWARD,OUTPUT);
+  pinMode(MOTOR_R_REVERSE,OUTPUT);
+  pinMode(MOTOR_V_FORWARD,OUTPUT);
+  pinMode(MOTOR_V_REVERSE,OUTPUT);
 
   Serial.println("starting control loop");
   Serial.println("Press any character to stop logging");
+  last_trans = millis();
   controlTimer.begin(controlLoop, LOOP_INTERVAL*1000);
 }
 
 // controlLoop(): updates motor output at every LOOP_INTERVAL 
 void controlLoop(void) {
+  unsigned long current_time = millis();
+  
   //-------Todo: write loop that handles state transitions----//
-  /* You can get the current time using millis() */
-  /* Use motorDriver object to set the motor values */
+  if (current_time - last_trans >= seq_t[curridx]*1000) {
+    if (curridx < SEQ_LEN - 1) {
+      curridx++;
+      last_trans = current_time;
+    }
+    Serial.print("switching to state "); Serial.println(curridx);
+  }
+  
+  motorDriver.left = seq_l[curridx];
+  motorDriver.right = seq_r[curridx];
+  motorDriver.vertical = seq_v[curridx];
+  motorDriver.apply();
+  motorDriver.printState();
 
   logger.log();
 }
@@ -72,4 +94,3 @@ void controlLoop(void) {
 void loop() {
   logger.write();
 }
-
