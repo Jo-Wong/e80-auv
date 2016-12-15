@@ -87,12 +87,12 @@ void controlLoop(void) {
   motorDriver.apply();
   motorDriver.printState();
 
-  digitalWrite(LOOP_LED,0);
+  digitalWrite(LOOP_LED,1);
   logger.log();
 }
 
 // loop(): write the buffered data to the sd card
 void loop() {
-  digitalWrite(LOOP_LED,1);
+  digitalWrite(LOOP_LED,0);
   logger.write();
 }
