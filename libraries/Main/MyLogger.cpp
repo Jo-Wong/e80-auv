@@ -1,5 +1,5 @@
 /*
- * File:  Logger.cpp
+ * File:  MyLogger.cpp
  * Author: Apoorva Sharma (asharma@hmc.edu)
  * Edited by: Josephine Wong (jowong@hmc.edu)
  *
@@ -194,8 +194,6 @@ void MyLogger::write(void) {
 			}
 			interrupts();
 		}
-		
-		delay(100);
 	}
 	
 	if(!sd.card()->writeStop()) {
